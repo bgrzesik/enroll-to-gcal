@@ -55,7 +55,8 @@ class Lesson(object):
     def event_repentance(self):
         # day = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"][self.start.weekday()]
         interval = 1 if len(self.week_type) == 0 else 2
-        until = self.last_occurrence_date.strftime("%Y%m%d")
+        # until = self.last_occurrence_date.strftime("%Y%m%d")
+        until = "20210616"
 
         return "RRULE:FREQ=WEEKLY;UNTIL={};INTERVAL={}".format(until, interval)
 
@@ -75,14 +76,14 @@ class Lesson(object):
         return "({}, {} {}, {}, {}, {}, {})".format(self.title,
                                                     self.week_type,
                                                     self.activity_type,
-                                                    self.start,
-                                                    self.end,
+                                                    self.event_start,
+                                                    self.event_end,
                                                     self.first_occurrence_date,
                                                     self.last_occurrence_date)
 
     def __repr__(self):
         return "{{\n\tevent={}\n\ttime=({}, {})\n\trepentance={}\n}}" \
-            .format(self.event_title, self.start, self.end, self.event_repentance)
+            .format(self.event_title, self.event_start, self.event_end, self.event_repentance)
 
 
 def get_plan():
@@ -98,4 +99,8 @@ def get_plan():
 
 if __name__ == "__main__":
     from pprint import pprint
-    pprint(get_plan())
+    plan = get_plan()
+
+    for lesson in plan:
+        print(lesson)
+

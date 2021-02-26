@@ -4,25 +4,7 @@ from db import get_db_connection
 from gcalendar import get_calendar_service, CALENDAR_ID
 from planner import get_plan, Lesson
 
-COLORS = {
-    "Algebra": 1,
-    "Algebra+": 1,
-    "Algebra(powtarzający)": 2,
-    "Analiza matematyczna 1": 3,
-    "Analiza matematyczna 1+": 3,
-    "Analiza matematyczna 1 (powtarzający)": 4,
-    "Matematyka dyskretna": 5,
-    "Matematyka dyskretna+": 5,
-    "Matematyka dyskretna(powtarzający)": 6,
-    "Kompetencje interpersonalne": 7,
-    "Wprowadzenie do systemu UNIX": 8,
-    "Wstęp do informatyki": 9,
-    "Wstęp do informatyki+": 9,
-    "Wstęp do informatyki (powtarzający)": 10,
-    "Wychowanie fizyczne": 11,
-    "Wychowanie fizyczne - chłopcy": 11,
-}
-
+colors = {}
 conn = get_db_connection()
 
 service = get_calendar_service()
@@ -33,10 +15,15 @@ batch = service.new_batch_http_request()
 
 def add_event(lesson):
     print(lesson)
+
+    color = colors.get(lesson.color)
+    if not color:
+        color = len(colors.keys())
+        colors[lesson.color] = color
+
     event = {
         'summary': lesson.event_title,
-        # 'colorId': lesson.color,
-        'colorId': COLORS[lesson.title],
+        'colorId': color,
         'description': lesson.event_desc,
         'recurrence': [lesson.event_repentance],
         'start': {
